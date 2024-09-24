@@ -1,0 +1,59 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: {{ cdi_name }}
+  namespace: {{ vm_name }}
+spec:
+  source:
+    upload: {}
+  pvc:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: {{ storage }}
+    storageClassName: local-path
+
+---
+
+Version: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: {{ vm_name }}
+  namespace: {{ vpc_name }} 
+spec:
+  running: true
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: {{ vm_name }}
+    spec:
+      domain:
+        devices:
+          cpu:
+            dedicatedCpuPlacement: true
+          disks:
+          - disk:
+              bus: virtio
+            name: harddrive
+          - cdrom:
+              bus: sata
+            name: cloudinitdisk
+        machine:
+          type: q35
+        resources:
+          requests:
+            cpu: {{ cpu }}
+            memory: {{ ram }}
+            
+      volumes:
+      - name: harddrive
+        dataVolume:
+          name: {{ data_volume_name }}
+      - name: cloudinitdisk
+        cloudInitNoCloud:
+          userData: |
+            #cloud-config configures the username and password upon init
+            password: vishantiCloud!
+            chpasswd: { expire: False }
+            hostname: vishantiCloud

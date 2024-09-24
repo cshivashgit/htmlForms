@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vishanthi Cloud - Create VM</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Align the input fields properly */
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .flavour-subsection {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .radio-group {
+            margin-bottom: 10px;
+        }
+
+        .custom-inputs {
+            display: flex;
+            gap: 20px;
+        }
+
+        .custom-inputs label, .custom-inputs input {
+            display: inline-block;
+        }
+    </style>
+    <script>
+        // Function to toggle between pre-defined flavours and custom options
+        function toggleFlavourOptions() {
+            const preDefinedFlavour = document.getElementById('preDefinedFlavour');
+            const customFlavour = document.getElementById('customFlavour');
+            const customOptions = document.getElementById('customOptions');
+            const predefinedOptions = document.getElementById('predefinedOptions');
+
+            if (preDefinedFlavour.checked) {
+                predefinedOptions.style.display = 'block';
+                customOptions.style.display = 'none';
+            } else if (customFlavour.checked) {
+                predefinedOptions.style.display = 'none';
+                customOptions.style.display = 'block';
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="row">
+          <div class="logo-row">
+            <img src="{{ url_for('static', filename='images/cloudLogo.png') }}" alt="logo" class="logo">
+          </div>
+        </div>
+      </header>    
+    <h1 style="text-align: center;"> Vishanthi Cloud : VM Creation</h2>
+
+    <!-- Check if a flash message exists -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <script>
+          alert("{{ messages[0] }}");
+        </script>
+      {% endif %}
+    {% endwith %}
+
+    <form action="/submit" method="POST">
+        <div class="form-section">
+            <label for="customerName">Customer Name:</label>
+            <input type="text" id="customerName" name="customerName" required><br><br>
+        </div>
+
+        <div class="form-section">
+            <label for="vpcName">VPC Name:</label>
+            <input type="text" id="vpcName" name="vpcName" required><br><br>
+        </div>
+
+        <div class="form-section">
+            <label for="vmName">VM Name:</label>
+            <input type="text" id="vmName" name="vmName" required><br><br>
+        </div>
+
+        <div class="form-section">
+            <label for="os">Operating System:</label>
+            <select id="os" name="os">
+                <option value="ubuntu2204">Ubuntu 22.04</option>
+                <option value="debian12">Debian 12</option>
+                <option value="windows">Windows 10</option>
+            </select><br><br>
+        </div>
+
+        <div class="form-section">
+            <label for="flavour">Flavour:</label>
+            <div class="flavour-subsection">
+                <!-- Radio buttons for pre-defined and custom flavour selection -->
+                <div class="radio-group">
+                    <input type="radio" id="preDefinedFlavour" name="flavourOption" value="predefined" onclick="toggleFlavourOptions()" checked>
+                    <label for="preDefinedFlavour">Pre-defined Flavours</label>
+
+                    <input type="radio" id="customFlavour" name="flavourOption" value="custom" onclick="toggleFlavourOptions()">
+                    <label for="customFlavour">Custom Flavour</label>
+                </div>
+
+                <!-- Predefined Flavour Dropdown -->
+                <div id="predefinedOptions">
+                    <select id="flavour" name="flavour">
+                        <option value="mini">mini (1 vCPU, 2G RAM)</option>
+                        <option value="medium">medium (2 vCPU, 4G RAM)</option>
+                        <option value="large">large (2 vCPU, 8G RAM)</option>
+                        <option value="xlarge">xlarge (4 vCPU, 16G RAM)</option>
+                    </select><br><br>
+                </div>
+
+                <!-- Custom CPU and RAM Inputs -->
+                <div id="customOptions" class="custom-inputs" style="display:none;">
+                    <label for="cpu">CPU (vCPU):</label>
+                    <input type="number" id="cpu" name="cpu" min="1" placeholder="Number of vCPUs"><br>
+
+                    <label for="ram">RAM (in GB):</label>
+                    <input type="number" id="ram" name="ram" min="1" placeholder="Amount of RAM in GB"><br>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <label for="storageInGb">Storage (in GB):</label>
+            <input type="number" id="storageInGb" name="storageInGb" placeholder="Amount of Storage in GB"><br>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

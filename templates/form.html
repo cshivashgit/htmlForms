@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>{{ form_data['title'] }}</title>
+</head>
+<body>
+    <h1>{{ form_data['title'] }}</h1>
+    <p><b>{{ form_data['description'] }}</b></p>
+    <form method="POST">
+        <!-- VPC Name -->
+        <div>
+            <label>{{ form_data['forms']['vpc']['components'][1]['label'] }}:</label>
+            <input type="text" name="vpcName" required>
+        </div>
+        
+        <!-- OS Selection -->
+        <div>
+            <label>{{ form_data['forms']['vpc']['components'][2]['label'] }}:</label>
+            <select name="os">
+                {% for option in form_data['forms']['vpc']['components'][2]['data']['values'] %}
+                    <option value="{{ option['value'] }}">{{ option['label'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Flavour Selection -->
+        <div>
+            <label>{{ form_data['forms']['vpc']['components'][3]['label'] }}:</label>
+            <select name="flavour">
+                {% for option in form_data['forms']['vpc']['components'][3]['data']['values'] %}
+                    <option value="{{ option['value'] }}">{{ option['label'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <!-- Storage Selection -->
+        <div>
+            <label>{{ form_data['forms']['vpc']['components'][4]['label'] }} (GB):</label>
+            <select name="storageInGb">
+                {% for option in form_data['forms']['vpc']['components'][4]['data']['values'] %}
+                    <option value="{{ option['value'] }}">{{ option['label'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Number of VPCs -->
+        <div>
+            <label>{{ form_data['forms']['vpc']['components'][5]['label'] }}:</label>
+            <select name="numberOfVpCs">
+                {% for option in form_data['forms']['vpc']['components'][5]['data']['values'] %}
+                    <option value="{{ option['value'] }}">{{ option['label'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+            <button type="submit">{{ form_data['forms']['vpc']['components'][0]['label'] }}</button>
+        </div>
+    </form>
+</body>
+</html>

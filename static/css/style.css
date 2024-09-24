@@ -1,0 +1,118 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Form styling */
+form {
+    width: 50%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form section styling */
+.form-section {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Input and select styling */
+input[type="text"],
+input[type="url"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Flavour section styling */
+.flavour-subsection {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.radio-group {
+    margin-bottom: 15px;
+}
+
+.custom-inputs {
+    display: flex;
+    gap: 20px;
+}
+
+.custom-inputs label, .custom-inputs input {
+    display: inline-block;
+    width: 48%; /* Ensures inputs align properly in two columns */
+}
+
+/* Button styling */
+button[type="submit"] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Flash message pop-up */
+.alert {
+    background-color: #dff0d8;
+    color: #3c763d;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Hide custom inputs by default */
+#customOptions {
+    display: none;
+}
+
+header img {
+    max-width: 100%; /* Responsive design */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.logo-row {
+    /*width: 250px; */
+    padding: 0px 250px 0px;
+    margin: 0 auto;
+}
+
+.logo {
+    width: auto;
+    height: auto;
+    /*width: 200px;
+    height: 50px; */
+    text-align: center;
+}

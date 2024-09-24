@@ -1,0 +1,70 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: {{ data_volume_name }}
+  namespace: {{ vpc_name }}
+spec:
+  source:
+    http: 
+      url: {{ url }}
+  pvc:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: {{ storage }}
+---
+
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: {{ vm_name }}
+  namespace: {{ vpc_name }} 
+  labels:
+    kubevirt.io/os: linux
+    kubevirt.io/app: debian2
+    #app: debian
+spec:
+  running: true
+  template:
+    metadata:
+      labels:
+        kubevirt.io/app: debian2
+        kubevirt.io/domain: debian
+        app: debian
+    spec:
+      domain:
+        cpu:
+          cores: {{ cpu }}
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            name: disk0
+          - cdrom:
+              bus: sata
+              readonly: true
+            name: cloudinitdisk
+        resources:
+          requests:
+            memory: {{ ram }}
+            
+      volumes:
+      - name: disk0
+        persistentVolumeClaim:
+          claimName: {{ data_volume_name }}
+      - name: cloudinitdisk
+        cloudInitNoCloud:
+          userData: |
+            #cloud-config configures the username and password upon init
+            system_info:
+              default_user:
+                name: vishanti
+                home: /home/vishanti
+            password: vishantiCloud!
+            chpasswd: { expire: False }
+            hostname: vishanti-k8s
+            ssh_pwauth: True
+            disable_root: false
+            ssh_authorized_keys:
+            - ssh-rsa YOUR_SSH_PUB_KEY_HERE

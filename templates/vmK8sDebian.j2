@@ -1,0 +1,66 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: {{ data_volume_name }}
+  namespace: {{ vm_name }}
+spec:
+  source:
+    http:
+      url: "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.qcow2"
+  pvc:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: {{ storage }}
+    storageClassName: local-path
+
+---
+
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: {{ vm_name }}
+  namespace: {{ vpc_name }} 
+spec:
+  running: true
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: {{ vm_name }}
+    spec:
+      domain:
+        cpu:
+          dedicatedCpuPlacement: true      
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            name: harddrive
+          - cdrom:
+              bus: sata
+            name: cloudinitdisk
+        machine:
+          type: q35
+        resources:
+          requests:
+            cpu: {{ cpu }}
+            memory: {{ ram }}
+            
+      volumes:
+      - name: harddrive
+        dataVolume:
+          name: {{ data_volume_name }}
+      - name: cloudinitdisk
+        cloudInitNoCloud:
+          userData: |
+            #cloud-config configures the username and password upon init
+            system_info:
+              default_user:
+                name: vishanti
+                home: /home/vishanti
+            password: vishantiCloud!
+            chpasswd: { expire: False }
+            hostname: debian-k8s
+            ssh_pwauth: True
+            disable_root: false
